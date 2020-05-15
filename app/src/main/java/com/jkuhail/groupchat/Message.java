@@ -1,9 +1,9 @@
 package com.jkuhail.groupchat;
 
 public class Message {
-    private String text;
-    private MemberData memberData;
-    private boolean belongsToCurrentUser;
+    private String text; // message body
+    private MemberData memberData; // data of the user that sent this message
+    private boolean belongsToCurrentUser; // is this message sent by us?
 
     public Message(String text, MemberData data, boolean belongsToCurrentUser) {
         this.text = text;

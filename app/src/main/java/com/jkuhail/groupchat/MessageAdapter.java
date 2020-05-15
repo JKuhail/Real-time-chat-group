@@ -16,7 +16,7 @@ import java.util.List;
 
 public class MessageAdapter extends BaseAdapter {
 
-    List<Message> messages = new ArrayList<Message>();
+    List<Message> messages = new ArrayList<>();
     Context context;
 
     public MessageAdapter(Context context) {
@@ -26,7 +26,7 @@ public class MessageAdapter extends BaseAdapter {
 
     public void add(Message message) {
         this.messages.add(message);
-        notifyDataSetChanged();
+        notifyDataSetChanged(); // to render the list we need to notify
     }
 
     @Override
@@ -44,18 +44,19 @@ public class MessageAdapter extends BaseAdapter {
         return i;
     }
 
+    // This is the backbone of the class, it handles the creation of single ListView row (chat bubble)
     @Override
     public View getView(int i, View convertView, ViewGroup viewGroup) {
         MessageViewHolder holder = new MessageViewHolder();
         LayoutInflater messageInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         Message message = messages.get(i);
 
-        if (message.isBelongsToCurrentUser()) {
+        if (message.isBelongsToCurrentUser()) { // this message was sent by us so let's create a basic chat bubble on the right
             convertView = messageInflater.inflate(R.layout.my_message, null);
             holder.messageBody = convertView.findViewById(R.id.message_body);
             convertView.setTag(holder);
             holder.messageBody.setText(message.getText());
-        } else {
+        } else { // this message was sent by someone else so let's create an advanced chat bubble on the left
             convertView = messageInflater.inflate(R.layout.their_message, null);
             holder.avatar =  convertView.findViewById(R.id.avatar);
             holder.name =  convertView.findViewById(R.id.name);

@@ -3,9 +3,11 @@ package com.jkuhail.groupchat;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,8 +21,8 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity implements RoomListener {
 
 
-    private String channelID = "ZgTjmO2bZfGcZovR";
-    private String roomName = "jkuhail";
+    private String channelID = "spGA6s3lzZ9ZBbvO";
+    private String roomName = "observable-group-chat-room";
     private EditText editText;
     private Scaledrone scaledrone;
     private MessageAdapter messageAdapter;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements RoomListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // This is where we write the message
         editText = findViewById(R.id.editText);
 
         messageAdapter = new MessageAdapter(this);
@@ -41,12 +44,16 @@ public class MainActivity extends AppCompatActivity implements RoomListener {
 
         scaledrone = new Scaledrone(channelID, data);
         scaledrone.connect(new Listener() {
+
+            // Successfully connected to Scaledrone room
             @Override
             public void onOpen() {
-                System.out.println("Group chat connection open");
+                System.err.println("Group chat connection open");
+                // Since the MainActivity itself already implement RoomListener we can pass it as a target
                 scaledrone.subscribe(roomName, MainActivity.this);
             }
 
+            // Connecting to Scaledrone room failed
             @Override
             public void onOpenFailure(Exception ex) {
                 System.err.println(ex);
@@ -74,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements RoomListener {
 
     @Override
     public void onOpen(Room room) {
-        System.out.println("Conneted to room");
+        System.err.println("Connected to room");
     }
 
     @Override
@@ -129,7 +136,7 @@ class MemberData {
         this.name = name;
         this.color = color;
     }
-
+    // Add an empty constructor so we can later parse JSON into MemberData using Jackson
     public MemberData() {
     }
 
